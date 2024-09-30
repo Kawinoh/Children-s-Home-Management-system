@@ -1,0 +1,26 @@
+[
+    {
+        "title": "Education Support",
+        "description": "Our education program is dedicated to providing children with essential learning materials and resources, ensuring that they have access to quality education. Through this initiative, we aim to foster academic growth and equip children with the knowledge they need for a brighter future."
+    },
+    {
+        "title": "Health Services",
+        "description": "We believe that every child deserves proper healthcare. Our healthcare program ensures that all children in our care receive regular medical checkups, vaccinations, and access to necessary treatments, safeguarding their well-being."
+    },
+    {
+        "title": "Food Program",
+        "description": "Proper nutrition is critical for healthy development. Our food program offers balanced, nutritious meals every day, contributing to the physical growth and vitality of each child, ensuring they have the energy to thrive."
+    },
+    {
+        "title": "Mentorship Program",
+        "description": "Guidance is key to personal growth, and through our mentorship program, children receive the support they need to make informed decisions about their lives and future careers. We connect them with caring mentors who provide valuable life skills and advice."
+    },
+    {
+        "title": "Sports and Recreation",
+        "description": "Physical activity is vital for a healthy body and mind. Our sports and recreation program encourages children to participate in various athletic activities, promoting teamwork, discipline, and overall physical health in a fun and engaging way."
+    },
+    {
+        "title": "Counseling Services",
+        "description": "Emotional well-being is a priority in our children’s home. Our trained counselors offer psychological support, helping children deal with past traumas, anxiety, and other emotional challenges, ensuring they grow up in a nurturing environment."
+    }
+]

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="gallery.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="logo/cmhs logo.png" alt="Company Logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="contact-link">Contact</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programs.html">Programs</a></li>
+        </ul>
+    </div>
+
+    <div class="gallery">
+        <h1 id="heading" style="text-transform: uppercase;">Gallery</h1>
+
+<script>
+    const heading = document.getElementById('heading');
+    const text = heading.textContent;
+    
+    // Split the text
+    const firstPart = text.slice(0, 3); // "Gal"
+    const secondPart = text.slice(3);   // "lery"
+    
+    // Update the HTML content
+    heading.innerHTML = `<span style="text-decoration: underline; color:blue;text-decoration-thickness: 4px;">${firstPart}</span><span style="color: blue;">${secondPart}`;
+</script>
+
+        <div class="gallery-images">
+            <img src="gallery/image 1.jpeg" alt="Image 1">
+            <img src="gallery/image 2.jpeg" alt="Image 2">
+            <img src="gallery/image 3.jpeg" alt="Image 3">
+            <img src="gallery/image 4.jpeg" alt="Image 4">
+            <img src="gallery/image 5.jpeg" alt="Image 5">
+            <img src="gallery/image 6.jpeg" alt="Image 6">
+            <img src="gallery/image 7.jpeg" alt="Image 7">
+            <img src="gallery/image 8.jpeg" alt="Image 8">
+            <img src="gallery/image 9.jpeg" alt="Image 9">
+            
+            
+        </div>
+        <h2>Meet Our Team</h2>
+
+        <div class="leader">
+            <img src="gallery/leaders/leader1.jpeg" alt="Leader 1">
+            <h3>John Doe</h3>
+            <p>Founder & CEO</p>
+        </div>
+
+        <div class="leader">
+            <img src="gallery/leaders/leader2.jpeg" alt="Leader 2">
+            <h3>Jane Smith</h3>
+            <p>Director of Operations</p>
+        </div>
+
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>Contact us: 
+                <a href="mailto:info@childrenhomesystem.org" target="_blank">
+                    <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
+                </a> 
+                | Phone: +254-707-332-850
+            </p>
+            <p>Follow us: 
+                <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

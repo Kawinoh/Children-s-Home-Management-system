@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="events.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="logo/cmhs logo.png" alt="Company Logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="contact-link">Contact</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programs.html">Programs</a></li>
+        </ul>
+    </div>
+    <div class="events">
+        <h1 style="text-transform: uppercase;">Upcoming Events</h1>
+        <div id="events-container"></div>
+        <script>
+            // Sample data for events related to a children's home, including images
+            const events = [
+                {
+                    title: "Annual Charity Fundraiser",
+                    date: "15/11/2024",
+                    location: "Children's Home Grounds",
+                    description: "Join us for our annual charity fundraiser to support the children's home. Enjoy an evening of performances, auctions, and more, with all proceeds going towards improving the lives of the children.",
+                    image: "events/charity-fundraiser.png"
+                },
+                {
+                    title: "Holiday Toy Drive",
+                    date: "01/12/2024",
+                    location: "Community Center",
+                    description: "Help us collect toys for the children this holiday season! Drop off your donations at the community center and make the holidays special for the kids at our home.",
+                    image: "events/toy-drive.jpeg"
+                },
+                {
+                    title: "Volunteer Orientation",
+                    date: "20/09/2024",
+                    location: "Children's Home Main Hall",
+                    description: "Interested in volunteering? Attend our orientation session to learn how you can get involved and make a difference in the lives of the children.",
+                    image: "events/volunteer-orientation.jpeg"
+                }
+            ];
+        
+            // Get the container element where the events will be displayed
+            const eventsContainer = document.getElementById('events-container');
+        
+            // Loop through the events array and create HTML for each event
+            events.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-details';
+                eventElement.innerHTML = `
+                  <img src="${event.image}" alt="${event.title}" style="width:150px; height:150px; object-fit: cover; border-radius: 50px;">
+
+                    <h2>${event.title}</h2>
+                    <p>Date: ${event.date}</p>
+                    <p>Location: ${event.location}</p>
+                    <p>Description: ${event.description}</p>
+                `;
+                eventsContainer.appendChild(eventElement);
+            });
+        </script>
+        
+
+    
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>Contact us: 
+                <a href="mailto:info@childrenhomesystem.org" target="_blank">
+                    <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
+                </a> 
+                | Phone: +254-707-332-850
+            </p>
+            <p>Follow us: 
+                <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

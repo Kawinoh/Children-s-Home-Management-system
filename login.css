@@ -1,0 +1,71 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #FFD700; /* Gold */
+    color: #000000; /* Black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+h1 {
+    color: #00008B; /* Dark Blue */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-container {
+    max-width: 400px;
+    padding: 20px;
+    background-color: #FFFFFF; /* White */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.form-logo {
+    max-width: 100px;
+    margin-bottom: 20px;
+    border-radius: 50px;
+    align-items: center;
+}
+
+form div {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+form label {
+    color: #000000; /* Black */
+}
+
+form input[type="text"],
+form input[type="password"] {
+    font-family: 'Times New Roman';
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #00008B; /* Dark Blue */
+    color: #FFFFFF; /* White */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .navbar a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}
+ 

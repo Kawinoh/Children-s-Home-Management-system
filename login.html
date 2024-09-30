@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="content">
+        <h1>CHILDREN'S HOME MANAGEMENT SYSTEM - LOGIN</h1>
+        <div class="form-container">
+            <img src="logo/cmhs logo.png" alt="Logo" class="form-logo">
+            <form action="login.php" method="POST" enctype="multipart/form-data">
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div>
+                    <button type="submit" name="login">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
