@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Profile Input</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   </head>
+<body>
+    <div class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="logo/cmhs logo.png" alt="Company Logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="contact-link">Contact</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programs.html">Programs</a></li>
+        </ul>
+    </div>
+
+    <div class="form-container">
+        <h1>Child Profile Input</h1>
+        <form id="profileForm" enctype="multipart/form-data" method="POST" action="profile-handler.php">
+            <h2>Basic Information</h2>
+            <div>
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" placeholder="Enter first Name" required>
+            </div>
+            <div>
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name"placeholder="Enter last Name" required>
+            </div>
+            <div>
+                <label for="date_of_birth">Date of Birth:</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" placeholder="Enter Date Of Birth" required>
+            </div>
+            <div>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div>
+                <label for="admission_date">Admission Date:</label>
+                <input type="date" id="admission_date" name="admission_date" required>
+            </div>
+            <div>
+                <label for="guardian_contact">Guardian Contact:</label>
+                <input type="text" id="guardian_contact" name="guardian_contact" required>
+            </div>
+            <div>
+                <label for="profile_picture">Profile Picture:</label>
+                <input type="file" id="profile_picture" name="profile_picture" required>
+            </div>
+
+            <h2>Health Records</h2>
+            <div>
+                <label for="health_check_date">Health Check Date:</label>
+                <input type="date" id="health_check_date" name="health_check_date" required>
+            </div>
+            <div>
+                <label for="health_status">Health Status:</label>
+                <input type="text" id="health_status" name="health_status" required>
+            </div>
+            <div>
+                <label for="vaccinations">Vaccinations:</label>
+                <textarea id="vaccinations" name="vaccinations" required></textarea>
+            </div>
+            <div>
+                <label for="allergies">Allergies:</label>
+                <textarea id="allergies" name="allergies" required></textarea>
+            </div>
+
+            <h2>Educational Records</h2>
+            <div>
+                <label for="school_name">School Name:</label>
+                <input type="text" id="school_name" name="school_name" required>
+            </div>
+            <div>
+                <label for="grade_level">Grade Level:</label>
+                <input type="text" id="grade_level" name="grade_level" required>
+            </div>
+            <div>
+                <label for="performance_summary">Performance Summary:</label>
+                <textarea id="performance_summary" name="performance_summary" required></textarea>
+            </div>
+            <div>
+                <label for="attendance_rate">Attendance Rate (%):</label>
+                <input type="number" id="attendance_rate" name="attendance_rate" step="0.01" required>
+            </div>
+
+            <button type="submit">Submit Profile</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>Contact us: 
+                <a href="mailto:info@childrenhomesystem.org" target="_blank">info@childrenhomesystem.org</a> 
+                | Phone: +254-707-332-850
+            </p>
+            <p>Follow us: 
+                <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="profile.js"></script>
+</body>
+</html>
