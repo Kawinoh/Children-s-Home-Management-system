@@ -1,12 +1,15 @@
+/* General body styling */
 body {
-    
-   
     margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
 }
 
+/* Navbar styles */
 .navbar {
     background-color: blue;
     overflow: hidden;
+    padding: 10px 0;
 }
 
 .navbar ul {
@@ -25,12 +28,14 @@ body {
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .navbar a:hover {
     background-color: #ddd;
     color: black;
 }
+
 .navbar ul li a.contact-link {
     border: 2px solid #ffae42;
     border-radius: 20px;
@@ -43,47 +48,73 @@ body {
     background-color: #f00;
     color: white;
 }
+
 .logo {
     float: left;
     max-height: 50px;
     margin-right: 20px;
 }
+
+/* Flexbox layout for content */
 .content {
     display: flex;
-    justify-content: space-around;
-    padding: 20px;
+    justify-content: space-between;
+    padding: 40px 5%;
+    background-color: #fff;
 }
 
 .column {
-    width: 30%; /* Adjust width as needed */
+    width: 45%; /* Adjust width as needed */
 }
 
+/* Form styling */
 form div {
     margin-bottom: 15px;
 }
 
 form label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
 }
 
 form input, form select, form textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f7f7f7;
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 form button {
-    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    padding: 12px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 16px;
 }
+
+form button:hover {
+    background-color: darkgreen;
+}
+
+/* Footer styling */
 .footer-content {
     text-align: center;
     padding: 20px;
     background-color: #f1f1f1;
+    color: #333;
+    font-size: 14px;
 }
 
 .footer-content a {
@@ -121,6 +152,23 @@ form button {
     color: #ffae42; /* Color change on hover */
 }
 
+/* Responsive design for mobile screens */
+@media screen and (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .column {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .navbar a {
+        padding: 10px;
+        text-align: center;
+    }
+}
 
 @media screen and (max-width: 600px) {
     .navbar {
