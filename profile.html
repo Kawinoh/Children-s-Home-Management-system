@@ -28,7 +28,9 @@
 
     <div class="form-container">
         <h1>Child Profile Input</h1>
-        <form id="profileForm" enctype="multipart/form-data" method="POST" action="profile-handler.php">
+        
+        <!-- Basic Information Form -->
+        <form id="basicInfoForm" enctype="multipart/form-data" method="POST" action="profile-child-handler.php">
             <h2>Basic Information</h2>
             <div>
                 <label for="first_name">First Name:</label>
@@ -54,32 +56,66 @@
                 <input type="date" id="admission_date" name="admission_date" required>
             </div>
             <div>
-                <label for="guardian_contact">Guardian Contact:</label>
+                <label for="guardian_contact">Primary Contact:</label>
                 <input type="text" id="guardian_contact" name="guardian_contact" required>
             </div>
             <div>
                 <label for="profile_picture">Profile Picture:</label>
                 <input type="file" id="profile_picture" name="profile_picture" required>
             </div>
+            <button type="submit">Submit Basic Info</button>
+        </form>
 
+        <!-- Health Records Form -->
+        <form id="healthRecordsForm" method="POST" action="profile-health-handler.php">
             <h2>Health Records</h2>
             <div>
                 <label for="health_check_date">Health Check Date:</label>
                 <input type="date" id="health_check_date" name="health_check_date" required>
             </div>
+           
             <div>
                 <label for="health_status">Health Status:</label>
-                <input type="text" id="health_status" name="health_status" required>
+                <select id="health_status" name="health_status" required onchange="toggleCondition()">
+                    <option value="Good">Good</option>
+                    <option value="Condition">Condition</option>
+                </select>
             </div>
+            
+            <!-- Conditional field for specifying health condition -->
+            <div id="condition_details" style="display: none;">
+                <label for="health_condition">Specify Condition:</label>
+                <input type="text" id="health_condition" name="health_condition" placeholder="Describe the condition">
+            </div>
+            
             <div>
                 <label for="vaccinations">Vaccinations:</label>
-                <textarea id="vaccinations" name="vaccinations" required></textarea>
+                <input type="text" id="vaccinations" name="vaccinations" required>
             </div>
+            
+            <script>
+                // Toggle visibility of condition details based on health status
+                function toggleCondition() {
+                    var healthStatus = document.getElementById('health_status').value;
+                    var conditionDetails = document.getElementById('condition_details');
+                    if (healthStatus === 'Condition') {
+                        conditionDetails.style.display = 'block';
+                    } else {
+                        conditionDetails.style.display = 'none';
+                    }
+                }
+            </script>
+            
+           
             <div>
                 <label for="allergies">Allergies:</label>
                 <textarea id="allergies" name="allergies" required></textarea>
             </div>
+            <button type="submit">Submit Health Records</button>
+        </form>
 
+        <!-- Educational Records Form -->
+        <form id="educationRecordsForm" method="POST" action="profile-education-handler.php">
             <h2>Educational Records</h2>
             <div>
                 <label for="school_name">School Name:</label>
@@ -97,8 +133,7 @@
                 <label for="attendance_rate">Attendance Rate (%):</label>
                 <input type="number" id="attendance_rate" name="attendance_rate" step="0.01" required>
             </div>
-
-            <button type="submit">Submit Profile</button>
+            <button type="submit">Submit Educational Records</button>
         </form>
     </div>
 

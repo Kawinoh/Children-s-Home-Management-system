@@ -1,10 +1,37 @@
-document.getElementById('profileForm').addEventListener('submit', function(event) {
-    // Prevent form submission if there are validation errors
-    if (!validateForm()) {
-        event.preventDefault();
+// Ensure DOM is fully loaded before running any code
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener for form submission
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(event) {
+            // Prevent form submission if there are validation errors
+            if (!validateForm()) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    // Add event listener for image preview
+    const profilePicture = document.getElementById('profile_picture');
+    if (profilePicture) {
+        profilePicture.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgPreview = document.getElementById('profileImgPreview');
+                    if (imgPreview) {
+                        imgPreview.src = e.target.result;
+                        imgPreview.style.display = 'block';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     }
 });
 
+// Validation function for form fields
 function validateForm() {
     let isValid = true;
     const firstName = document.getElementById('first_name').value;
@@ -27,22 +54,5 @@ function validateForm() {
         isValid = false;
     }
 
-    // Add more validation checks as needed
-
     return isValid;
 }
-
-// Image preview function (optional)
-document.getElementById('profile_picture').addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // You can add an img element somewhere in your HTML to preview the image
-            const imgPreview = document.getElementById('profileImgPreview');
-            imgPreview.src = e.target.result;
-            imgPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-});
