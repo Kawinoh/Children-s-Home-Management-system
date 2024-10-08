@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programs</title>
-    <link rel="stylesheet" href="programs.css">
+    <title>Volunteers - Children's Home Management System</title>
+    <link rel="stylesheet" href="volunteers.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   
 </head>
 <body>
     <div class="navbar">
@@ -26,13 +25,33 @@
             <li><a href="reports_impact.html">Reports & Impact</a></li>
         </ul>
     </div>
-    <div class="programs">
-        <h1 style="text-transform: uppercase;">Our Programs</h1>
-        <!-- Empty container where live programs will be inserted -->
-        <div id="program-list"></div>
-    </div>
-
-    <script src="programs.js"></script>
+    <section>
+        <h1>Become a Volunteer</h1>
+        <p>Join us in providing care and support to children. Sign up below to become part of our volunteer team.</p>
+        <div class="form-container">
+            <form action="volunteer_handler.php" method="POST">
+                
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills/Interests:</label>
+                    <textarea id="skills" name="skills" placeholder="Describe your skills or areas of interest"></textarea>
+                </div>
+                <button type="submit">Submit Application</button>
+            </form>
+        </div>
+    </section>
+    
     <footer>
         <div class="footer-content">
             <p>Contact us: 

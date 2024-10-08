@@ -93,6 +93,63 @@
     color: #666;
     margin-bottom: 10px; /* Adds space below paragraph */
 }
+/* Caregiver Section Styles */
+.content {
+    padding: 20px; /* Add padding for the content section */
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius: 10px; /* Rounded corners */
+    margin-top: 20px; /* Space above the section */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.content h1 {
+    text-align: center; /* Center align the section title */
+    color: #333; /* Dark color for the title */
+}
+
+.caregiver-list {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-around; /* Space between items */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.volunteer {
+    text-align: center; /* Center align text within caregiver cards */
+    margin: 10px; /* Space around each caregiver card */
+    max-width: 200px; /* Maximum width for each card */
+}
+
+.caregiver-img {
+    width: 100%; /* Ensure images are responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners for images */
+    border: 3px solid #ddd; /* Border for images */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+.volunteer h3 {
+    margin-top: 10px; /* Space above the name */
+    font-size: 18px; /* Font size for names */
+    color: #007BFF; /* Color for names */
+}
+
+.volunteer p {
+    color: #666; /* Color for description */
+    font-size: 14px; /* Font size for description */
+    margin-top: 5px; /* Space above the description */
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 600px) {
+    .caregiver-list {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: center; /* Center align items */
+    }
+    .volunteer {
+        max-width: 90%; /* Allow more width on smaller screens */
+    }
+}
+
 .footer-content {
     text-align: center;
     padding: 20px;

@@ -85,28 +85,47 @@ form button:hover {
     background-color: darkblue;
 }
 
-footer {
+
+
+.footer-content {
     text-align: center;
     padding: 20px;
     background-color: #f1f1f1;
-    color: #333;
-}
-
-.footer-content {
-    font-size: 14px;
 }
 
 .footer-content a {
-    color: blue;
+    margin: 0 10px;
+    font-size: 24px;
     text-decoration: none;
 }
 
-.footer-content a:hover {
-    text-decoration: underline;
+.footer-content a i {
+    margin-right: 8px;
+    transition: color 0.3s;
 }
 
-.footer-content p {
-    margin: 0;
+.footer-content a[href^="mailto"] i {
+    color: #D44638; /* Red for email (Gmail-like color) */
+}
+
+.footer-content a[href*="facebook.com"] i {
+    color: #1877F2; /* Facebook blue */
+}
+
+.footer-content a[href*="twitter.com"] i {
+    color: #000000; /* Black for X (formerly Twitter) */
+}
+
+.footer-content a[href*="instagram.com"] i {
+    color: #E1306C; /* Instagram gradient pink */
+}
+
+.footer-content a[href*="linkedin.com"] i {
+    color: #0077B5; /* LinkedIn blue */
+}
+
+.footer-content a:hover i {
+    color: #ffae42; /* Color change on hover */
 }
 
 @media screen and (max-width: 600px) {
