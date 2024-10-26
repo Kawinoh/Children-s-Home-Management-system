@@ -7,7 +7,51 @@
     <link rel="stylesheet" href="education_records.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ... (keep all your existing styles) ... */
+         .search-container {
+            margin-bottom: 20px;
+        }
+        .child-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        .search-button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .search-button:hover {
+            background: #0056b3;
+        }
+        .error-message {
+            color: #dc3545;
+            display: none;
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border-radius: 4px;
+        }
+        .search-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #child_id {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .loading {
+            display: none;
+            margin-left: 10px;
+        }
         .normal-fields, .other-fields {
             display: none;
         }

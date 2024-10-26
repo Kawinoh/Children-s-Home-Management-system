@@ -25,7 +25,7 @@ try {
         throw new Exception("Child ID is required");
     }
 
-    // Get basic child information with the exact column names from your table
+    // Get basic child information
     $childInfoSql = "SELECT 
                         child_id,
                         first_name,
@@ -39,14 +39,14 @@ try {
                      WHERE child_id = ?";
     
     $stmt = $conn->prepare($childInfoSql);
-    $stmt->bind_param("i", $child_id); // Changed to integer binding since child_id is int(11)
+    $stmt->bind_param("i", $child_id); // Integer binding for child_id
     $stmt->execute();
     $childResult = $stmt->get_result();
 
     // Get education records
     $eduSql = "SELECT * FROM education_records WHERE child_id = ?";
     $eduStmt = $conn->prepare($eduSql);
-    $eduStmt->bind_param("i", $child_id); // Changed to integer binding
+    $eduStmt->bind_param("i", $child_id); // Integer binding for child_id
     $eduStmt->execute();
     $eduResult = $eduStmt->get_result();
 
@@ -69,19 +69,19 @@ try {
         if ($eduResult->num_rows > 0) {
             $eduData = $eduResult->fetch_assoc();
             $educationData = [
-                'child_condition' => $eduData['child_condition'] ?? null,
-                'condition_details' => $eduData['special_needs_support'] ?? null,
-                'school_name' => $eduData['school_name'] ?? null,
-                'grade_level' => $eduData['grade_level'] ?? null,
-                'performance_summary' => $eduData['performance_summary'] ?? null,
-                'attendance_rate' => $eduData['attendance_rate'] ?? null
+                'child_condition' => $eduData['child_condition'] ?? 'N/A',
+                'condition_details' => $eduData['special_needs_support'] ?? 'N/A',
+                'school_name' => $eduData['school_name'] ?? 'N/A',
+                'grade_level' => $eduData['grade_level'] ?? 'N/A',
+                'performance_summary' => $eduData['performance_summary'] ?? 'N/A',
+                'attendance_rate' => $eduData['attendance_rate'] ?? 'N/A'
             ];
         }
 
         // Format profile picture URL
         $profilePicture = !empty($childData['profile_picture']) 
             ? $childData['profile_picture']
-            : 'default-profile.jpg'; // You can change this default image path
+            : 'default-profile.jpg';
 
         // Combine all data
         echo json_encode([
