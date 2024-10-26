@@ -25,23 +25,28 @@ try {
         throw new Exception("Child ID is required");
     }
 
-    // Get basic child information
-    $childInfoSql = "SELECT c.*, 
-                            COALESCE(c.first_name, c.child_name, c.fullname) as child_name,
-                            COALESCE(c.dob, c.date_of_birth, c.birth_date) as date_of_birth,
-                            COALESCE(c.gender, c.sex) as gender
-                     FROM children c 
-                     WHERE c.child_id = ?";
+    // Get basic child information with the exact column names from your table
+    $childInfoSql = "SELECT 
+                        child_id,
+                        first_name,
+                        last_name,
+                        date_of_birth,
+                        gender,
+                        admission_date,
+                        guardian_contact,
+                        profile_picture
+                     FROM children 
+                     WHERE child_id = ?";
     
     $stmt = $conn->prepare($childInfoSql);
-    $stmt->bind_param("s", $child_id);
+    $stmt->bind_param("i", $child_id); // Changed to integer binding since child_id is int(11)
     $stmt->execute();
     $childResult = $stmt->get_result();
 
     // Get education records
     $eduSql = "SELECT * FROM education_records WHERE child_id = ?";
     $eduStmt = $conn->prepare($eduSql);
-    $eduStmt->bind_param("s", $child_id);
+    $eduStmt->bind_param("i", $child_id); // Changed to integer binding
     $eduStmt->execute();
     $eduResult = $eduStmt->get_result();
 
@@ -50,34 +55,48 @@ try {
         
         // Calculate age if we have a birth date
         $age = null;
-        if (isset($childData['date_of_birth'])) {
+        if (!empty($childData['date_of_birth'])) {
             $birthDate = new DateTime($childData['date_of_birth']);
             $today = new DateTime();
             $age = $today->diff($birthDate)->y;
         }
+
+        // Format full name
+        $fullName = trim($childData['first_name'] . ' ' . $childData['last_name']);
 
         // Prepare education data if available
         $educationData = null;
         if ($eduResult->num_rows > 0) {
             $eduData = $eduResult->fetch_assoc();
             $educationData = [
-                'child_condition' => $eduData['child_condition'],
-                'condition_details' => $eduData['special_needs_support'],
-                'school_name' => $eduData['school_name'],
-                'grade_level' => $eduData['grade_level'],
-                'performance_summary' => $eduData['performance_summary'],
-                'attendance_rate' => $eduData['attendance_rate']
+                'child_condition' => $eduData['child_condition'] ?? null,
+                'condition_details' => $eduData['special_needs_support'] ?? null,
+                'school_name' => $eduData['school_name'] ?? null,
+                'grade_level' => $eduData['grade_level'] ?? null,
+                'performance_summary' => $eduData['performance_summary'] ?? null,
+                'attendance_rate' => $eduData['attendance_rate'] ?? null
             ];
         }
+
+        // Format profile picture URL
+        $profilePicture = !empty($childData['profile_picture']) 
+            ? $childData['profile_picture']
+            : 'default-profile.jpg'; // You can change this default image path
 
         // Combine all data
         echo json_encode([
             'found' => true,
             'child_info' => [
-                'name' => $childData['child_name'] ?? 'Name not available',
-                'age' => $age ?? 'Age not available',
-                'gender' => $childData['gender'] ?? 'Gender not available',
-                'child_id' => $child_id
+                'child_id' => $childData['child_id'],
+                'full_name' => $fullName,
+                'first_name' => $childData['first_name'],
+                'last_name' => $childData['last_name'],
+                'age' => $age ?? 'Not available',
+                'date_of_birth' => $childData['date_of_birth'] ?? 'Not available',
+                'gender' => $childData['gender'] ?? 'Not available',
+                'admission_date' => $childData['admission_date'] ?? 'Not available',
+                'guardian_contact' => $childData['guardian_contact'] ?? 'Not available',
+                'profile_picture' => $profilePicture
             ],
             'education_records' => $educationData ?? [
                 'found' => false,
