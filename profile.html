@@ -16,8 +16,8 @@
             <li><a href="home.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="contact.html" class="contact-link">Contact</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="health_records.html">Health Records </a></li>
+            <li><a href="education_records.html">Educational Records  </a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="programs.html">Programs</a></li>
             <li><a href="volunteers.html">Volunteers</a></li>
@@ -32,6 +32,10 @@
         <!-- Basic Information Form -->
         <form id="basicInfoForm" enctype="multipart/form-data" method="POST" action="profile-child-handler.php">
             <h2>Basic Information</h2>
+            <div>
+                <label for="child_id">Child Id:</label>
+                <input type="text" name="child_id" id="child_id" placeholder="Please insert Child Id" required>
+            </div>
             <div>
                 <label for="first_name">First Name:</label>
                 <input type="text" id="first_name" name="first_name" placeholder="Enter first name" required>
@@ -66,76 +70,7 @@
             <button type="submit">Submit Basic Info</button>
         </form>
 
-        <!-- Health Records Form -->
-        <form id="healthRecordsForm" method="POST" action="profile-health-handler.php">
-            <h2>Health Records</h2>
-            <div>
-                <label for="health_check_date">Health Check Date:</label>
-                <input type="date" id="health_check_date" name="health_check_date" required>
-            </div>
-           
-            <div>
-                <label for="health_status">Health Status:</label>
-                <select id="health_status" name="health_status" required onchange="toggleCondition()">
-                    <option value="Good">Good</option>
-                    <option value="Condition">Condition</option>
-                </select>
-            </div>
-            
-            <!-- Conditional field for specifying health condition -->
-            <div id="condition_details" style="display: none;">
-                <label for="health_condition">Specify Condition:</label>
-                <input type="text" id="health_condition" name="health_condition" placeholder="Describe the condition">
-            </div>
-            
-            <div>
-                <label for="vaccinations">Vaccinations:</label>
-                <input type="text" id="vaccinations" name="vaccinations" required>
-            </div>
-            
-            <script>
-                // Toggle visibility of condition details based on health status
-                function toggleCondition() {
-                    var healthStatus = document.getElementById('health_status').value;
-                    var conditionDetails = document.getElementById('condition_details');
-                    if (healthStatus === 'Condition') {
-                        conditionDetails.style.display = 'block';
-                    } else {
-                        conditionDetails.style.display = 'none';
-                    }
-                }
-            </script>
-            
-           
-            <div>
-                <label for="allergies">Allergies:</label>
-                <textarea id="allergies" name="allergies" required></textarea>
-            </div>
-            <button type="submit">Submit Health Records</button>
-        </form>
-
-        <!-- Educational Records Form -->
-        <form id="educationRecordsForm" method="POST" action="profile-education-handler.php">
-            <h2>Educational Records</h2>
-            <div>
-                <label for="school_name">School Name:</label>
-                <input type="text" id="school_name" name="school_name" required>
-            </div>
-            <div>
-                <label for="grade_level">Grade Level:</label>
-                <input type="text" id="grade_level" name="grade_level" required>
-            </div>
-            <div>
-                <label for="performance_summary">Performance Summary:</label>
-                <textarea id="performance_summary" name="performance_summary" required></textarea>
-            </div>
-            <div>
-                <label for="attendance_rate">Attendance Rate (%):</label>
-                <input type="number" id="attendance_rate" name="attendance_rate" step="0.01" required>
-            </div>
-            <button type="submit">Submit Educational Records</button>
-        </form>
-    </div>
+      </div>
 
     <footer>
         <div class="footer-content">

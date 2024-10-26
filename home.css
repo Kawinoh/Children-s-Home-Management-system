@@ -142,3 +142,34 @@ body {
         padding: 10px;
     }
 }
+.cta-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #00008B; /* Base color for the button */
+    color: white; /* Text color */
+    text-align: center;
+    text-decoration: none; /* Remove underline from the link */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+    margin: 10px 5px; /* Margin around buttons */
+    border: none; /* Remove default button border */
+}
+
+.cta-button:hover {
+    background-color: #0b0a08; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.cta-button:active {
+    transform: scale(0.95); /* Shrink effect on click */
+}
+
+/* Specific adjustments for nested links in buttons */
+.cta-button a {
+    color: white; /* Ensure link color is white */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Make the link fill the button */
+    height: 100%; /* Allow link to take full height of button */
+}

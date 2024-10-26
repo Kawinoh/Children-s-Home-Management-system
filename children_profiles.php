@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $admission_date = $_POST['admission_date'];
 
     // Prepare the SQL update statement
-    $query = "UPDATE children SET first_name = ?, date_of_birth= ?, guardian_contact = ?, admission_date = ? WHERE child_id = ?";
+    $query = "UPDATE children SET child_id = ?,first_name = ?, date_of_birth= ?, guardian_contact = ?, admission_date = ? WHERE child_id = ?";
     $stmt = $pdo->prepare($query);
 
     // Execute the statement

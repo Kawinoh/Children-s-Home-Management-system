@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Records</title>
+    <link rel="stylesheet" href="health_records.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .child-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        .search-button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .search-button:hover {
+            background: #0056b3;
+        }
+        .error-message {
+            color: #dc3545;
+            display: none;
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border-radius: 4px;
+        }
+        .search-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #child_id {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .loading {
+            display: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="home.html" class="logo-link">
+            <img src="logo/cmhs logo.png" alt="CHMS Logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="health_records.html">Health Records </a></li>
+            <li><a href="education_records.html">Educational Records  </a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="volunteers.html">Volunteers</a></li>
+            <li><a href="children_profile.php">Children Profiles</a></li>
+            <li><a href="reports_impact.html">Reports & Impact</a></li>
+        </ul>
+    </div>
+    
+    <div class="form-container">
+        <h2>Health Records</h2>
+        
+        <!-- Separate search form -->
+        <div class="search-container">
+            <div class="search-row">
+                <input type="text" id="child_id" placeholder="Enter Child ID" required>
+                <button type="button" class="search-button" onclick="searchChild()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <span class="loading" id="loadingSpinner">
+                    <i class="fas fa-spinner fa-spin"></i> Searching...
+                </span>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="child-info" id="childInfo">
+                <h3>Child Information</h3>
+                <p><strong>Name:</strong> <span id="childName"></span></p>
+                <p><strong>Age:</strong> <span id="childAge"></span></p>
+                <p><strong>Gender:</strong> <span id="childGender"></span></p>
+            </div>
+        </div>
+
+        <!-- Health Records Form -->
+        <form id="healthRecordsForm" method="POST" action="profile-health-handler.php" style="display: none;">
+            <input type="hidden" id="form_child_id" name="child_id">
+            
+            <div>
+                <label for="health_check_date">Health Check Date:</label>
+                <input type="date" id="health_check_date" name="health_check_date" required>
+            </div>
+            
+            <div>
+                <label for="health_status">Health Status:</label>
+                <select id="health_status" name="health_status" required onchange="toggleCondition()">
+                    <option value="Good">Good</option>
+                    <option value="Condition">Condition</option>
+                </select>
+            </div>
+            
+            <div id="condition_details" style="display: none;">
+                <label for="health_condition">Specify Condition:</label>
+                <input type="text" id="health_condition" name="health_condition" placeholder="Describe the condition">
+                <div>
+                    <label for="diagnosis">Diagnosis:</label>
+                    <input type="text" id="diagnosis" name="diagnosis" placeholder="Describe the diagnosis">
+                </div>
+            </div>
+            
+            <div>
+                <label for="vaccinations">Vaccinations:</label>
+                <input type="text" id="vaccinations" name="vaccinations" placeholder="Specify the vaccination type">
+            </div>
+            
+            <div>
+                <label for="allergies">Allergies:</label>
+                <textarea id="allergies" name="allergies" required></textarea>
+            </div>
+            
+            <button type="submit">Submit Health Records</button>
+        </form>
+    </div>
+
+    <script>
+    function searchChild() {
+        const childId = document.getElementById('child_id').value.trim();
+        if (!childId) {
+            showError("Please enter a Child ID");
+            return;
+        }
+
+        // Show loading spinner
+        document.getElementById('loadingSpinner').style.display = 'inline-block';
+        // Hide previous error and info
+        document.getElementById('errorMessage').style.display = 'none';
+        document.getElementById('childInfo').style.display = 'none';
+        document.getElementById('healthRecordsForm').style.display = 'none';
+
+        // Make the AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `search_child.php?child_id=${encodeURIComponent(childId)}`, true);
+        
+        xhr.onload = function() {
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
+            
+            try {
+                const response = JSON.parse(this.responseText);
+                
+                if (response.error) {
+                    showError(response.error);
+                    return;
+                }
+
+                if (response.found) {
+                    // Show child information
+                    document.getElementById('childName').textContent = response.name;
+                    document.getElementById('childAge').textContent = response.age;
+                    document.getElementById('childGender').textContent = response.gender;
+                    document.getElementById('childInfo').style.display = 'block';
+                    
+                    // Show the health records form and set the hidden child_id
+                    document.getElementById('form_child_id').value = childId;
+                    document.getElementById('healthRecordsForm').style.display = 'block';
+                } else {
+                    showError("No child found with this ID");
+                }
+            } catch (e) {
+                showError("Error processing the response");
+                console.error(e);
+            }
+        };
+
+        xhr.onerror = function() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            showError("Error connecting to the server");
+        };
+
+        xhr.send();
+    }
+
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+
+    function toggleCondition() {
+        var healthStatus = document.getElementById('health_status').value;
+        var conditionDetails = document.getElementById('condition_details');
+        conditionDetails.style.display = healthStatus === 'Condition' ? 'block' : 'none';
+    }
+    </script>
+<footer>
+    <div class="footer-content">
+        <p>Contact us: 
+            <a href="mailto:info@childrenhomesystem.org" target="_blank">
+                <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
+            </a> 
+            | Phone: +254-707-332-850
+        </p>
+        <p>Follow us: 
+            <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </p>
+    </div>
+</footer>
+</body>
+</html>

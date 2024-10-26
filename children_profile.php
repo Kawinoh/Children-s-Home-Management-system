@@ -28,6 +28,11 @@ $stmt = $pdo->prepare($query);
 $stmt->execute([$child_id]);
 $childProfile = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// If no child profile is found
+if (!$childProfile) {
+    die("No child profile found for the given Child ID.");
+}
+
 // Fetch health records for the child
 $query_health = "SELECT * FROM health_records WHERE child_id = ?";
 $stmt_health = $pdo->prepare($query_health);
@@ -59,8 +64,8 @@ $educationRecords = $stmt_education->fetchAll(PDO::FETCH_ASSOC);
             <li><a href="home.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="contact.html" class="contact-link">Contact</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="health_records.html">Health Records</a></li>
+            <li><a href="education_records.html">Educational Records</a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="programs.html">Programs</a></li>
             <li><a href="volunteers.html">Volunteers</a></li>
@@ -74,6 +79,7 @@ $educationRecords = $stmt_education->fetchAll(PDO::FETCH_ASSOC);
         <table>
             <thead>
                 <tr>
+                    <th>Child Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Date of Birth</th>
@@ -85,86 +91,96 @@ $educationRecords = $stmt_education->fetchAll(PDO::FETCH_ASSOC);
             </thead>
             <tbody>
                 <?php
-                // Check for child profile
-                if ($childProfile) {
+                // Display child profile data
+                echo "<tr>
+                    <td>" . htmlspecialchars($childProfile['child_id']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['first_name']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['last_name']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['date_of_birth']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['gender']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['admission_date']) . "</td>
+                    <td>" . htmlspecialchars($childProfile['guardian_contact']) . "</td>
+                    <td><img src='" . htmlspecialchars($childProfile['profile_picture']) . "' alt='Profile Picture' width='100'></td>
+                </tr>";
+                ?>
+            </tbody>
+        </table>
+    </section>
+
+   <!-- Health Records Section -->
+<section>
+    <h2>Health Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Child Id</th>
+                <th>Health Check Date</th>
+                <th>Health Status</th>
+                <th>Health Condition</th>
+                <th>Diagnosis</th>
+                <th>Vaccinations</th>
+                <th>Allergies</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (count($healthRecords) > 0) {
+                foreach ($healthRecords as $record) {
                     echo "<tr>
-                            <td>" . htmlspecialchars($childProfile['first_name']) . "</td>
-                            <td>" . htmlspecialchars($childProfile['last_name']) . "</td>
-                            <td>" . htmlspecialchars($childProfile['date_of_birth']) . "</td>
-                            <td>" . htmlspecialchars($childProfile['gender']) . "</td>
-                            <td>" . htmlspecialchars($childProfile['admission_date']) . "</td>
-                            <td>" . htmlspecialchars($childProfile['guardian_contact']) . "</td>
-                            <td><img src='" . htmlspecialchars($childProfile['profile_picture']) . "' alt='Profile Picture' width='100'></td>
-                        </tr>";
-                } else {
-                    echo "<tr><td colspan='7'>No profile found.</td></tr>";
+                        <td>" . htmlspecialchars($childProfile['child_id']) . "</td>
+                        <td>" . htmlspecialchars($record['health_check_date']) . "</td>
+                        <td>" . htmlspecialchars($record['health_status']) . "</td>
+                        <td>" . (isset($record['health_condition']) ? htmlspecialchars($record['health_condition']) : 'N/A') . "</td>
+                        <td>" . (isset($record['diagnosis']) ? htmlspecialchars($record['diagnosis']) : 'N/A') . "</td>
+                        <td>" . (isset($record['vaccinations']) ? htmlspecialchars($record['vaccinations']) : 'N/A') . "</td>
+                        <td>" . (isset($record['allergies']) ? htmlspecialchars($record['allergies']) : 'N/A') . "</td>
+                    </tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </section>
+            } else {
+                echo "<tr><td colspan='7'>No health records found.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</section>
 
-    <section>
-        <h2>Health Records</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Health Check Date</th>
-                    <th>Health Status</th>
-                    <th>Health Condition</th>
-                    <th>Vaccinations</th>
-                    <th>Allergies</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if (count($healthRecords) > 0) {
-                    foreach ($healthRecords as $record) {
-                        echo "<tr>
-                                <td>" . htmlspecialchars($record['health_check_date']) . "</td>
-                                <td>" . htmlspecialchars($record['health_status']) . "</td>
-                                <td>" . htmlspecialchars($record['health_condition']) . "</td>
-                                <td>" . htmlspecialchars($record['vaccinations']) . "</td>
-                                <td>" . htmlspecialchars($record['allergies']) . "</td>
-                            </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>No health records found.</td></tr>";
+<!-- Educational Records Section -->
+<section>
+    <h2>Educational Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Child Id</th>
+                <th>Child Condition</th>
+                <th>School Name</th>
+                <th>Grade Level</th>
+                <th>Performance Summary</th>
+                <th>Attendance Rate</th>
+                <th>Special Needs Support Required</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (count($educationRecords) > 0) {
+                foreach ($educationRecords as $record) {
+                    echo "<tr>
+                        <td>" . htmlspecialchars($childProfile['child_id']) . "</td>
+                        <td>" . (isset($childProfile['child_condition']) ? htmlspecialchars($childProfile['child_condition']) : 'N/A') . "</td>
+                        <td>" . htmlspecialchars($record['school_name']) . "</td>
+                        <td>" . htmlspecialchars($record['grade_level']) . "</td>
+                        <td>" . htmlspecialchars($record['performance_summary']) . "</td>
+                        <td>" . (isset($record['attendance_rate']) ? htmlspecialchars($record['attendance_rate']) . "%" : 'N/A') . "</td>
+                        <td>" . (isset($record['special_needs_support']) ? htmlspecialchars($record['special_needs_support']) : 'N/A') . "</td>
+                    </tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </section>
+            } else {
+                echo "<tr><td colspan='7'>No educational records found.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</section>
 
-    <section>
-        <h2>Educational Records</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>School Name</th>
-                    <th>Grade Level</th>
-                    <th>Performance Summary</th>
-                    <th>Attendance Rate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if (count($educationRecords) > 0) {
-                    foreach ($educationRecords as $record) {
-                        echo "<tr>
-                                <td>" . htmlspecialchars($record['school_name']) . "</td>
-                                <td>" . htmlspecialchars($record['grade_level']) . "</td>
-                                <td>" . htmlspecialchars($record['performance_summary']) . "</td>
-                                <td>" . htmlspecialchars($record['attendance_rate']) . "%</td>
-                            </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4'>No educational records found.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-    </section>
 
     <footer>
         <div class="footer-content">

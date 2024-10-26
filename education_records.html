@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Records</title>
+    <link rel="stylesheet" href="education_records.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ... (keep all your existing styles) ... */
+        .normal-fields, .other-fields {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="home.html" class="logo-link">
+            <img src="logo/cmhs logo.png" alt="CHMS Logo" class="logo">
+        </a>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="health_records.html">Health Records </a></li>
+            <li><a href="education_records.html">Educational Records  </a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="volunteers.html">Volunteers</a></li>
+            <li><a href="children_profile.php">Children Profiles</a></li>
+            <li><a href="reports_impact.html">Reports & Impact</a></li>
+        </ul>
+    </div>
+    <div class="form-container">
+        <h2>Educational Records</h2>
+        
+        <div class="search-container">
+            <div class="search-row">
+                <input type="text" id="child_id" placeholder="Enter Child ID" required>
+                <button type="button" class="search-button" onclick="searchChild()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <span class="loading" id="loadingSpinner">
+                    <i class="fas fa-spinner fa-spin"></i> Searching...
+                </span>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            <div class="child-info" id="childInfo">
+                <h3>Child Information</h3>
+                <p><strong>Name:</strong> <span id="childName"></span></p>
+                <p><strong>Age:</strong> <span id="childAge"></span></p>
+                <p><strong>Gender:</strong> <span id="childGender"></span></p>
+            </div>
+        </div>
+
+        <form id="educationRecordsForm" style="display: none;">
+            <input type="hidden" id="form_child_id" name="child_id">
+            
+            <div class="form-group">
+                <label for="child_condition">Child Condition:</label>
+                <select id="child_condition" name="child_condition" required>
+                    <option value="Normal">Normal</option>
+                    <option value="Not School Age">Not School Age</option>
+                    <option value="Other">Other Condition</option>
+                </select>
+            </div>
+
+            <div class="form-group other-fields">
+                <label for="condition_details">Describe Condition:</label>
+                <textarea id="condition_details" name="condition_details" rows="4"></textarea>
+            </div>
+
+            <div class="normal-fields">
+                <div class="form-group">
+                    <label for="school_name">School Name:</label>
+                    <input type="text" id="school_name" name="school_name">
+                </div>
+                <div class="form-group">
+                    <label for="grade_level">Grade Level:</label>
+                    <input type="text" id="grade_level" name="grade_level">
+                </div>
+                <div class="form-group">
+                    <label for="performance_summary">Performance Summary:</label>
+                    <textarea id="performance_summary" name="performance_summary"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="attendance_rate">Attendance Rate (%):</label>
+                    <input type="number" id="attendance_rate" name="attendance_rate" step="0.01" min="0" max="100">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitButton">
+                Submit Educational Records
+                <span class="form-loading" id="submitSpinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function searchChild() {
+            const childId = document.getElementById('child_id').value.trim();
+            if (!childId) {
+                showError("Please enter a Child ID");
+                return;
+            }
+
+            // Show loading spinner and disable search button
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const searchButton = document.querySelector('.search-button');
+            loadingSpinner.style.display = 'inline-block';
+            searchButton.disabled = true;
+
+            // Hide previous messages and form
+            hideMessages();
+            document.getElementById('childInfo').style.display = 'none';
+            document.getElementById('educationRecordsForm').style.display = 'none';
+
+            // Make AJAX request to search for child
+            fetch(`search_child.php?child_id=${encodeURIComponent(childId)}`)
+                .then(response => response.json())
+                .then(response => {
+                    loadingSpinner.style.display = 'none';
+                    searchButton.disabled = false;
+
+                    if (response.error) {
+                        showError(response.error);
+                        return;
+                    }
+
+                    if (response.found) {
+                        // Show child information
+                        document.getElementById('childName').textContent = response.name;
+                        document.getElementById('childAge').textContent = response.age;
+                        document.getElementById('childGender').textContent = response.gender;
+                        document.getElementById('childInfo').style.display = 'block';
+                        
+                        // Show and prepare the education records form
+                        document.getElementById('form_child_id').value = childId;
+                        document.getElementById('educationRecordsForm').style.display = 'block';
+                        
+                        // Fetch existing education records
+                        return fetch(`profile-education-handler.php?child_id=${encodeURIComponent(childId)}`);
+                    } else {
+                        showError("No child found with this ID");
+                    }
+                })
+                .then(response => response ? response.json() : null)
+                .then(data => {
+                    if (data && !data.error) {
+                        populateForm(data);
+                        showSuccess("Child found successfully. Existing records loaded.");
+                    } else {
+                        showSuccess("Child found successfully. No existing records.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError("Error connecting to the server");
+                });
+        }
+
+        function populateForm(data) {
+            document.querySelector('[name="child_condition"]').value = data.child_condition;
+            
+            // Handle condition-specific fields
+            if (data.child_condition === 'Normal' || data.child_condition === 'Other') {
+                document.querySelector('[name="school_name"]').value = data.school_name || '';
+                document.querySelector('[name="grade_level"]').value = data.grade_level || '';
+                document.querySelector('[name="performance_summary"]').value = data.performance_summary || '';
+                document.querySelector('[name="attendance_rate"]').value = data.attendance_rate || '';
+            }
+            
+            if (data.child_condition === 'Other') {
+                document.querySelector('[name="condition_details"]').value = data.special_needs_support || '';
+            }
+            
+            // Update form fields visibility
+            updateFormFields(data.child_condition);
+        }
+
+        function updateFormFields(condition) {
+            const normalFields = document.querySelector('.normal-fields');
+            const otherFields = document.querySelector('.other-fields');
+            const schoolInputs = normalFields.querySelectorAll('input, textarea');
+            const conditionDetails = document.getElementById('condition_details');
+            
+            // Reset required attributes
+            schoolInputs.forEach(input => input.removeAttribute('required'));
+            conditionDetails.removeAttribute('required');
+            
+            // Show/hide fields based on condition
+            if (condition === 'Normal' || condition === 'Other') {
+                normalFields.style.display = 'block';
+                schoolInputs.forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                normalFields.style.display = 'none';
+            }
+            
+            if (condition === 'Other') {
+                otherFields.style.display = 'block';
+                conditionDetails.setAttribute('required', 'required');
+            } else {
+                otherFields.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Form submission handler
+        document.getElementById('educationRecordsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const submitButton = document.getElementById('submitButton');
+            const submitSpinner = document.getElementById('submitSpinner');
+            submitButton.disabled = true;
+            submitSpinner.style.display = 'inline-block';
+            hideMessages();
+
+            const formData = new FormData(this);
+
+            fetch('profile-education-handler.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(response => {
+                submitSpinner.style.display = 'none';
+                submitButton.disabled = false;
+
+                if (response.includes("successfully")) {
+                    showSuccess("Records saved successfully! Redirecting to profile page...");
+                    setTimeout(() => {
+                        window.location.href = 'children_profile.php';
+                    }, 2000);
+                } else {
+                    showError(response);
+                }
+            })
+            .catch(error => {
+                submitSpinner.style.display = 'none';
+                submitButton.disabled = false;
+                showError("Error connecting to the server");
+                console.error('Error:', error);
+            });
+        });
+
+        // Initialize fields visibility and set up event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle condition change
+            document.getElementById('child_condition').addEventListener('change', function() {
+                updateFormFields(this.value);
+            });
+
+            // Check for child_id in URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const childId = urlParams.get('child_id');
+            
+            if (childId) {
+                document.getElementById('child_id').value = childId;
+                searchChild();
+            }
+            
+            // Initialize fields visibility
+            updateFormFields(document.getElementById('child_condition').value);
+        });
+    </script>
+
+<footer>
+    <div class="footer-content">
+        <p>Contact us: 
+            <a href="mailto:info@childrenhomesystem.org" target="_blank">
+                <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
+            </a> 
+            | Phone: +254-707-332-850
+        </p>
+        <p>Follow us: 
+            <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </p>
+    </div>
+</footer>
+</body>
+</html>
