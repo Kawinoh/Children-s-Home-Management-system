@@ -1,11 +1,11 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
 }
 
 .navbar {
-    background-color: blue;
+    background-color: blue; /* Change this to match your desired background color */
     overflow: hidden;
 }
 
@@ -13,13 +13,14 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
 }
 
-.navbar li {
-    float: left;
+.navbar ul li {
+    margin-right: 20px;
 }
 
-.navbar a {
+.navbar ul li a {
     display: block;
     color: #f2f2f2;
     text-align: center;
@@ -27,10 +28,10 @@ body {
     text-decoration: none;
 }
 
-.navbar a:hover {
+.navbar ul li a:hover {
     background-color: #ddd;
     color: black;
-} 
+}
 .navbar ul li a.contact-link {
     border: 2px solid #ffae42;
     border-radius: 20px;
@@ -38,16 +39,12 @@ body {
     color: #ffd700;
     transition: background-color 0.3s, color 0.3s;
 }
-
-.navbar ul li a.contact-link:hover {
-    background-color: #f00;
-    color: white;
-}
 .logo {
     float: left;
     max-height: 50px;
     margin-right: 20px;
 }
+
 
 .form-container {
     padding: 20px;

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="education_records.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-         .search-container {
+        .search-container {
             margin-bottom: 20px;
         }
         .child-info {
@@ -37,6 +37,14 @@
             background-color: #ffe6e6;
             border-radius: 4px;
         }
+        .success-message {
+            color: #28a745;
+            display: none;
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #e6ffe6;
+            border-radius: 4px;
+        }
         .search-row {
             display: flex;
             align-items: center;
@@ -51,8 +59,42 @@
         .loading {
             display: none;
             margin-left: 10px;
+            align-items: center;
         }
         .normal-fields, .other-fields {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .submit-btn:hover {
+            background: #218838;
+        }
+        .form-loading {
             display: none;
         }
     </style>
@@ -66,8 +108,8 @@
             <li><a href="home.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="health_records.html">Health Records </a></li>
-            <li><a href="education_records.html">Educational Records  </a></li>
+            <li><a href="health_records.html">Health Records</a></li>
+            <li><a href="education_records.html">Educational Records</a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="programs.html">Programs</a></li>
             <li><a href="volunteers.html">Volunteers</a></li>
@@ -75,6 +117,7 @@
             <li><a href="reports_impact.html">Reports & Impact</a></li>
         </ul>
     </div>
+
     <div class="form-container">
         <h2>Educational Records</h2>
         
@@ -84,9 +127,9 @@
                 <button type="button" class="search-button" onclick="searchChild()">
                     <i class="fas fa-search"></i> Search
                 </button>
-                <span class="loading" id="loadingSpinner">
+                <div class="loading" id="loadingSpinner">
                     <i class="fas fa-spinner fa-spin"></i> Searching...
-                </span>
+                </div>
             </div>
             <div class="error-message" id="errorMessage"></div>
             <div class="success-message" id="successMessage"></div>
@@ -151,78 +194,61 @@
                 return;
             }
 
-            // Show loading spinner and disable search button
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const searchButton = document.querySelector('.search-button');
-            loadingSpinner.style.display = 'inline-block';
-            searchButton.disabled = true;
-
-            // Hide previous messages and form
-            hideMessages();
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            
+            // Hide previous error and info
+            document.getElementById('errorMessage').style.display = 'none';
             document.getElementById('childInfo').style.display = 'none';
             document.getElementById('educationRecordsForm').style.display = 'none';
 
-            // Make AJAX request to search for child
+            // Make the AJAX request
             fetch(`search_child.php?child_id=${encodeURIComponent(childId)}`)
                 .then(response => response.json())
-                .then(response => {
-                    loadingSpinner.style.display = 'none';
-                    searchButton.disabled = false;
-
-                    if (response.error) {
-                        showError(response.error);
+                .then(data => {
+                    // Hide loading spinner
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    if (data.error) {
+                        showError(data.error);
                         return;
                     }
 
-                    if (response.found) {
+                    if (data.found) {
                         // Show child information
-                        document.getElementById('childName').textContent = response.name;
-                        document.getElementById('childAge').textContent = response.age;
-                        document.getElementById('childGender').textContent = response.gender;
+                        const childInfo = data.child_info;
+                        document.getElementById('childName').textContent = childInfo.full_name;
+                        document.getElementById('childAge').textContent = childInfo.age;
+                        document.getElementById('childGender').textContent = childInfo.gender;
+                        
                         document.getElementById('childInfo').style.display = 'block';
                         
-                        // Show and prepare the education records form
+                        // Show the education records form and set the hidden child_id
                         document.getElementById('form_child_id').value = childId;
                         document.getElementById('educationRecordsForm').style.display = 'block';
-                        
-                        // Fetch existing education records
-                        return fetch(`profile-education-handler.php?child_id=${encodeURIComponent(childId)}`);
+
+                        // If there are existing education records, populate the form
+                        if (data.education_records) {
+                            const records = data.education_records;
+                            document.getElementById('child_condition').value = records.child_condition || 'Normal';
+                            document.getElementById('school_name').value = records.school_name || '';
+                            document.getElementById('grade_level').value = records.grade_level || '';
+                            document.getElementById('performance_summary').value = records.performance_summary || '';
+                            document.getElementById('attendance_rate').value = records.attendance_rate || '';
+                            document.getElementById('condition_details').value = records.condition_details || '';
+                            
+                            // Update form fields visibility based on condition
+                            updateFormFields(records.child_condition);
+                        }
                     } else {
                         showError("No child found with this ID");
                     }
                 })
-                .then(response => response ? response.json() : null)
-                .then(data => {
-                    if (data && !data.error) {
-                        populateForm(data);
-                        showSuccess("Child found successfully. Existing records loaded.");
-                    } else {
-                        showSuccess("Child found successfully. No existing records.");
-                    }
-                })
                 .catch(error => {
-                    console.error('Error:', error);
+                    document.getElementById('loadingSpinner').style.display = 'none';
                     showError("Error connecting to the server");
+                    console.error('Error:', error);
                 });
-        }
-
-        function populateForm(data) {
-            document.querySelector('[name="child_condition"]').value = data.child_condition;
-            
-            // Handle condition-specific fields
-            if (data.child_condition === 'Normal' || data.child_condition === 'Other') {
-                document.querySelector('[name="school_name"]').value = data.school_name || '';
-                document.querySelector('[name="grade_level"]').value = data.grade_level || '';
-                document.querySelector('[name="performance_summary"]').value = data.performance_summary || '';
-                document.querySelector('[name="attendance_rate"]').value = data.attendance_rate || '';
-            }
-            
-            if (data.child_condition === 'Other') {
-                document.querySelector('[name="condition_details"]').value = data.special_needs_support || '';
-            }
-            
-            // Update form fields visibility
-            updateFormFields(data.child_condition);
         }
 
         function updateFormFields(condition) {
@@ -329,29 +355,29 @@
         });
     </script>
 
-<footer>
-    <div class="footer-content">
-        <p>Contact us: 
-            <a href="mailto:info@childrenhomesystem.org" target="_blank">
-                <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
-            </a> 
-            | Phone: +254-707-332-850
-        </p>
-        <p>Follow us: 
-            <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
-                <i class="fab fa-facebook"></i>
-            </a>
-            <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
-                <i class="fab fa-linkedin"></i>
-            </a>
-        </p>
-    </div>
-</footer>
+    <footer>
+        <div class="footer-content">
+            <p>Contact us: 
+                <a href="mailto:info@childrenhomesystem.org" target="_blank">
+                    <i class="fas fa-envelope"></i> info@theangelschildrenhomesystem.org
+                </a> 
+                | Phone: +254-707-332-850
+            </p>
+            <p>Follow us: 
+                <a href="https://facebook.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://twitter.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com/company/theangelschildrenhomesystem" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </p>
+        </div>
+    </footer>
 </body>
 </html>

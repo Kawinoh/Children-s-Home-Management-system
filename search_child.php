@@ -1,5 +1,5 @@
 <?php
-// Disable caching
+// search_child.php
 header('Cache-Control: no-cache, must-revalidate');
 header('Content-Type: application/json');
 
@@ -10,50 +10,35 @@ $password = "";
 $dbname = "children_home_management_system";
 
 try {
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        throw new Exception("Connection failed: " . $conn->connect_error);
-    }
-
-    // Get and sanitize the child ID
-    $child_id = isset($_GET['child_id']) ? $conn->real_escape_string($_GET['child_id']) : '';
+    // Create connection using PDO for better security
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // Get and validate the child ID
+    $child_id = isset($_GET['child_id']) ? trim($_GET['child_id']) : '';
     
     if (empty($child_id)) {
         throw new Exception("Child ID is required");
     }
 
-    // Get basic child information
-    $childInfoSql = "SELECT 
-                        child_id,
-                        first_name,
-                        last_name,
-                        date_of_birth,
-                        gender,
-                        admission_date,
-                        guardian_contact,
-                        profile_picture
-                     FROM children 
-                     WHERE child_id = ?";
+    // Prepare and execute the query
+    $stmt = $pdo->prepare("SELECT 
+        child_id,
+        first_name,
+        last_name,
+        date_of_birth,
+        gender,
+        admission_date,
+        guardian_contact
+        FROM children 
+        WHERE child_id = ?");
     
-    $stmt = $conn->prepare($childInfoSql);
-    $stmt->bind_param("i", $child_id); // Integer binding for child_id
-    $stmt->execute();
-    $childResult = $stmt->get_result();
-
-    // Get education records
-    $eduSql = "SELECT * FROM education_records WHERE child_id = ?";
-    $eduStmt = $conn->prepare($eduSql);
-    $eduStmt->bind_param("i", $child_id); // Integer binding for child_id
-    $eduStmt->execute();
-    $eduResult = $eduStmt->get_result();
-
-    if ($childResult->num_rows > 0) {
-        $childData = $childResult->fetch_assoc();
+    $stmt->execute([$child_id]);
+    
+    if ($stmt->rowCount() > 0) {
+        $childData = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Calculate age if we have a birth date
+        // Calculate age
         $age = null;
         if (!empty($childData['date_of_birth'])) {
             $birthDate = new DateTime($childData['date_of_birth']);
@@ -61,48 +46,32 @@ try {
             $age = $today->diff($birthDate)->y;
         }
 
-        // Format full name
-        $fullName = trim($childData['first_name'] . ' ' . $childData['last_name']);
-
-        // Prepare education data if available
-        $educationData = null;
-        if ($eduResult->num_rows > 0) {
-            $eduData = $eduResult->fetch_assoc();
-            $educationData = [
-                'child_condition' => $eduData['child_condition'] ?? 'N/A',
-                'condition_details' => $eduData['special_needs_support'] ?? 'N/A',
-                'school_name' => $eduData['school_name'] ?? 'N/A',
-                'grade_level' => $eduData['grade_level'] ?? 'N/A',
-                'performance_summary' => $eduData['performance_summary'] ?? 'N/A',
-                'attendance_rate' => $eduData['attendance_rate'] ?? 'N/A'
-            ];
-        }
-
-        // Format profile picture URL
-        $profilePicture = !empty($childData['profile_picture']) 
-            ? $childData['profile_picture']
-            : 'default-profile.jpg';
-
-        // Combine all data
-        echo json_encode([
+        // Format response data
+        $response = [
             'found' => true,
             'child_info' => [
                 'child_id' => $childData['child_id'],
-                'full_name' => $fullName,
+                'full_name' => trim($childData['first_name'] . ' ' . $childData['last_name']),
                 'first_name' => $childData['first_name'],
                 'last_name' => $childData['last_name'],
                 'age' => $age ?? 'Not available',
                 'date_of_birth' => $childData['date_of_birth'] ?? 'Not available',
                 'gender' => $childData['gender'] ?? 'Not available',
                 'admission_date' => $childData['admission_date'] ?? 'Not available',
-                'guardian_contact' => $childData['guardian_contact'] ?? 'Not available',
-                'profile_picture' => $profilePicture
-            ],
-            'education_records' => $educationData ?? [
-                'found' => false,
-                'message' => 'No education records found'
+                'guardian_contact' => $childData['guardian_contact'] ?? 'Not available'
             ]
-        ]);
+        ];
+
+        // Get existing health records if any
+        $healthStmt = $pdo->prepare("SELECT * FROM health_records WHERE child_id = ? ORDER BY health_check_date DESC LIMIT 1");
+        $healthStmt->execute([$child_id]);
+        
+        if ($healthStmt->rowCount() > 0) {
+            $healthData = $healthStmt->fetch(PDO::FETCH_ASSOC);
+            $response['health_records'] = $healthData;
+        }
+
+        echo json_encode($response);
     } else {
         echo json_encode([
             'found' => false,
@@ -110,15 +79,9 @@ try {
         ]);
     }
 
-    // Close statements and connection
-    $stmt->close();
-    $eduStmt->close();
-    $conn->close();
-
 } catch (Exception $e) {
+    http_response_code(500);
     echo json_encode([
-        'error' => $e->getMessage(),
-        'trace' => $e->getTraceAsString()
+        'error' => $e->getMessage()
     ]);
 }
-?>

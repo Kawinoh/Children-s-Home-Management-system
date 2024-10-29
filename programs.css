@@ -1,3 +1,8 @@
+body {
+    
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+}
 /* Navbar styles */
 .navbar {
     background-color: blue; /* Change this to match your desired background color */
