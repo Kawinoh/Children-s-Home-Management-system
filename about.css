@@ -60,6 +60,24 @@ body {
 .content {
     padding: 20px;
 }
+.programs {
+    padding: 20px;
+}
+
+.program-details {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.program-details h2 {
+    margin-top: 0;
+}
+
+.program-details p {
+    margin-bottom: 10px;
+}
 .footer-content {
     text-align: center;
     padding: 20px;
@@ -102,31 +120,20 @@ body {
 }
 
 
-
+/* Responsive design */
 @media screen and (max-width: 600px) {
     .navbar ul {
+        display: flex;
         flex-direction: column;
+        text-align: center;
     }
-    .navbar ul li {
+
+    .navbar li {
         float: none;
     }
-}
 
-@media screen and (max-width: 600px) {
-    .navbar {
-        position: relative;
-    }
-
-    .navbar a {
-        float: none;
-        display: block;
-        text-align: left;
-        width: 100%;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .navbar a {
-        padding: 10px;
+    .form-container {
+        width: 90%;
+        margin: auto;
     }
 }

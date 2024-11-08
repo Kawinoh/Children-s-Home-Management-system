@@ -1,11 +1,13 @@
+/* General Body Styles */
 body {
-    
     font-family: 'Times New Roman', Times, serif;
     margin: 0;
+    padding: 0;
 }
-/* Navbar styles */
+
+/* Navbar Styles */
 .navbar {
-    background-color: blue; /* Change this to match your desired background color */
+    background-color: blue;
     overflow: hidden;
 }
 
@@ -32,41 +34,59 @@ body {
     background-color: #ddd;
     color: black;
 }
-.navbar ul li a.contact-link {
-    border: 2px solid #ffae42;
-    border-radius: 20px;
-    padding: 5px 15px;
-    color: #ffd700;
-    transition: background-color 0.3s, color 0.3s;
-}
 
-.navbar ul li a.contact-link:hover {
-    background-color: #f00;
-    color: white;
-}
-.logo {
+.navbar .logo {
     float: left;
     max-height: 50px;
     margin-right: 20px;
 }
-.programs {
+
+/* Form Container Styles */
+.form-container {
+    max-width: 600px;
+    margin: 20px auto;
     padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
 }
 
-.program-details {
-    margin-bottom: 20px;
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, textarea {
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
-.program-details h2 {
-    margin-top: 0;
+textarea {
+    resize: none;
+    height: 100px;
 }
 
-.program-details p {
-    margin-bottom: 10px;
+button, input[type="submit"] {
+    align-self: flex-start;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
 }
+
+button:hover, input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styles */
 .footer-content {
     text-align: center;
     padding: 20px;
@@ -85,30 +105,30 @@ body {
 }
 
 .footer-content a[href^="mailto"] i {
-    color: #D44638; /* Red for email (Gmail-like color) */
+    color: #D44638;
 }
 
 .footer-content a[href*="facebook.com"] i {
-    color: #1877F2; /* Facebook blue */
+    color: #1877F2;
 }
 
 .footer-content a[href*="twitter.com"] i {
-    color: #000000; /* Black for X (formerly Twitter) */
+    color: #000000;
 }
 
 .footer-content a[href*="instagram.com"] i {
-    color: #E1306C; /* Instagram gradient pink */
+    color: #E1306C;
 }
 
 .footer-content a[href*="linkedin.com"] i {
-    color: #0077B5; /* LinkedIn blue */
+    color: #0077B5;
 }
 
 .footer-content a:hover i {
-    color: #ffae42; /* Color change on hover */
+    color: #ffae42;
 }
 
-
+/* Media Queries for Responsive Design */
 @media screen and (max-width: 600px) {
     .navbar ul {
         flex-direction: column;
@@ -118,18 +138,11 @@ body {
         margin-right: 0;
         margin-bottom: 10px;
     }
-}
-
-@media screen and (max-width: 600px) {
-    .navbar {
-        position: relative;
-    }
 
     .navbar a {
         float: none;
         display: block;
         text-align: left;
-        width: 100%;
     }
 }
 
